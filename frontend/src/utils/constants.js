@@ -1,5 +1,4 @@
-export const URL = process.env.REACT_APP_API;
-console.log(URL, process.env);
+export const URL = process.env.API_SERVER_URL;
 export const MINIMUM_PASSWORD_LENGTH = 3;
 export const MINIMUM_USERNAME_LENGTH = 3;
 export const MAXIMUM_DESCRIPTION_LENGTH = 200;

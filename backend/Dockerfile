@@ -13,8 +13,6 @@ RUN pnpm run build
 
 FROM base
 RUN npm install -g pm2
-ARG PORT=3001
 COPY --from=prod-deps /app/node_modules /app/node_modules
 COPY --from=build /app/dist /app
-EXPOSE 3001
-CMD [ "pm2-runtime", "src/main.js" ]
+CMD [ "pm2-runtime", "src/main.js", "--update-env" ]

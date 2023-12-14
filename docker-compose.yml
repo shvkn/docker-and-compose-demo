@@ -1,23 +1,5 @@
 version: "3.9"
 services:
-  nginx_proxy:
-    image: nginx:latest
-    volumes:
-      - ./nginx/templates:/etc/nginx/templates
-    # network_mode: host
-    links:
-      - frontend
-      - backend
-    networks:
-      - external
-    hostname: nginx_proxy
-    ports:
-      - "80:80"
-      - "443:443"
-    environment:
-      - PORT=${PORT}
-      - HOST=${HOST}
-      - API_HOST=${API_HOST}
   database:
     image: "postgres:12"
     environment:
@@ -27,17 +9,14 @@ services:
     volumes:
       - pg-data:/var/lib/postgresql/data
     ports:
-      - "${DB_PORT}:5432"
+      - $DB_PORT:5432
     networks:
-      - internal
-      - external
+      - backend
   backend:
     container_name: backend
     hostname: backend
     build:
       context: ./backend
-      args:
-        - PORT=${PORT:-4000}
     environment:
       - DB_DATABASE=${POSTGRES_DB}
       - DB_USERNAME=${POSTGRES_USER}
@@ -47,34 +26,39 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-24h}
       - SWAGGER_API_PATH=${SWAGGER_API_PATH:-api}
-      - PORT=${PORT:-4000}
+      - PORT=${BACKEND_APP_PORT:-4000}
+    expose:
+      - $PORT
     ports:
-      - 4000:3001
+      - $PORT:$PORT
     links:
       - database:postgres
     depends_on:
       - database
     networks:
-      - internal
-      - external
+      - backend
+      - frontend
   frontend:
     container_name: frontend
     hostname: frontend
+    environment:
+      - FRONTEND_APP_PORT=${FRONTEND_APP_PORT:-8081}
     build:
       context: ./frontend
       args:
-        - API_BASE_URL=${API_BASE_URL}
+        - API_SERVER_URL=${API_SERVER_URL}
     depends_on:
       - backend
     volumes:
       - ./frontend/nginx/conf.d:/etc/nginx/conf.d
     ports:
-      - 8081:80
+      - FRONTEND_APP_PORT:80
     networks:
-      - external
+      - frontend
 volumes:
   pg-data:
+
 networks:
-  internal:
+  backend:
     internal: true
-  external:
+  frontend:
