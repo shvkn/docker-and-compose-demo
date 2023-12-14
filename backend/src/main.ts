@@ -34,7 +34,8 @@ async function bootstrap() {
   SwaggerModule.setup(process.env.SWAGGER_API_PATH || 'api', app, document);
 
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
-
+  console.log(process.env.PORT);
+  
   await app.listen(+process.env.PORT || 3001);
 }
 
