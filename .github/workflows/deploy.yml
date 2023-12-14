@@ -6,8 +6,8 @@ on:
   pull_request:
     branches: [ "main" ]
 env:
-  FRONTEND_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/kupipodariday-frontend:${{ github.sha }}
-  BACKEND_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/kupipodariday-backend:${{ github.sha }}
+  FRONTEND_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/kupipodariday-frontend
+  BACKEND_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/kupipodariday-backend
 
 jobs:
 
@@ -33,7 +33,7 @@ jobs:
         context: ./backend
         file: ./backend/Dockerfile
         push: true
-        tags: ${{ env.BACKEND_IMAGE }}
+        tags: ${{ env.BACKEND_IMAGE }}:${{ github.sha }},${{ env.BACKEND_IMAGE }}:latest
 
   build-frontend:
     runs-on: ubuntu-latest
@@ -58,4 +58,4 @@ jobs:
           file: ./frontend/Dockerfile
           push: true
           build-args: SERVER_URL=${{ secrets.API_SERVER_URL }}
-          tags: ${{ env.FRONTEND_IMAGE }}
+          tags: ${{ env.FRONTEND_IMAGE }}:${{ github.sha }},${{ env.FRONTEND_IMAGE }}:latest

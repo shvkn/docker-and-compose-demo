@@ -7,13 +7,12 @@ WORKDIR /app
 
 FROM base AS prod-deps
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
-
 FROM base AS build
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run build
 
 FROM base
+RUN npm install -g pm2
 COPY --from=prod-deps /app/node_modules /app/node_modules
 COPY --from=build /app/dist /app
-EXPOSE 3001
-CMD [ "node", "src/main.js" ]
+CMD [ "pm2-runtime", "src/main.js", "--update-env" ]
