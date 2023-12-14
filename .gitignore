@@ -1,4 +1,5 @@
 .idea
-# !.env.*.example
-# .env.deploy
-# .env.*
+!.env.example
+!.env.*.example
+.env.deploy
+.env.*

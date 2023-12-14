@@ -57,5 +57,5 @@ jobs:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
-          build-args: SERVER_URL=${{ secrets.API_SERVER_URL }}
+          build-args: API_SERVER_URL=${{ vars.API_SERVER_URL }}
           tags: ${{ env.FRONTEND_IMAGE }}:${{ github.sha }},${{ env.FRONTEND_IMAGE }}:latest
