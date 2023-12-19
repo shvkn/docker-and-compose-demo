@@ -17,16 +17,16 @@ services:
     restart: unless-stopped
   backend:
     image: shvkn/kupipodariday-backend:latest
-    environment:
-      - DB_DATABASE=${DB_DATABASE}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_HOST=${DB_HOST:-database}
-      - DB_PORT=${DB_PORT:-5432}
-      - JWT_SECRET=${JWT_SECRET}
-      - JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-24h}
-      - SWAGGER_API_PATH=${SWAGGER_API_PATH:-api}
-      - PORT=${PORT:-4000}
+    # environment:
+    #   - DB_DATABASE=${DB_DATABASE}
+    #   - DB_USERNAME=${DB_USERNAME}
+    #   - DB_PASSWORD=${DB_PASSWORD}
+    #   - DB_HOST=${DB_HOST:-database}
+    #   - DB_PORT=${DB_PORT:-5432}
+    #   - JWT_SECRET=${JWT_SECRET}
+    #   - JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-24h}
+    #   - SWAGGER_API_PATH=${SWAGGER_API_PATH:-api}
+    #   - PORT=${PORT:-4000}
     expose:
       - ${PORT:-4000}
     ports:
@@ -41,8 +41,8 @@ services:
     restart: unless-stopped
   frontend:
     image: shvkn/kupipodariday-frontend:latest
-    environment:
-      - FRONTEND_APP_PORT=${FRONTEND_APP_PORT:-8081}
+    # environment:
+    #   - FRONTEND_APP_PORT=${FRONTEND_APP_PORT:-8081}
     depends_on:
       - backend
     ports:
