@@ -5,6 +5,25 @@
 **Backend**: https://api.kp.another-one.ru<br>
 **IP**: 158.160.104.94
 
+```bash
+#.env.example
+POSTGRES_DB="kupipodariday"
+POSTGRES_USER="student"
+POSTGRES_PASSWORD="student"
+BACKEND_APP_PORT="4000"
+DB_PORT="5432"
+JWT_SECRET="some-jwt-secret"
+JWT_EXPIRES_IN="24h"
+SWAGGER_API_PATH="api"
+API_SERVER_URL="http://localhost:4000"
+FRONTEND_APP_PORT="8081"
+```
+
+## Запуск
+```bash
+docker compose up
+```
+<!-- 
 Реализованы два сценания **Continuous delivery (CD)**: 
 - Локальная сборка Dockerfiles
 - Сборка через [Docker Hub](https://hub.docker.com) (Github workflows)
@@ -75,4 +94,4 @@ up
 
 ## Планы
 > [!NOTE]
-> Добавить автоматическое создание ВМ в yandex.cloud и полностью автоматизировать деплой
+> Добавить автоматическое создание ВМ в yandex.cloud и полностью автоматизировать деплой -->
