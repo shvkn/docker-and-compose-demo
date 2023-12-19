@@ -3,10 +3,11 @@ services:
   database:
     image: "postgres:12"
     environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - DB_PORT=${DB_PORT:-5432}
+      - POSTGRES_DB=${DB_DATABASE}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    env_file:
+      - .env
     volumes:
       - pg-data:/var/lib/postgresql/data
     ports:
@@ -17,24 +18,16 @@ services:
   backend:
     container_name: backend
     hostname: backend
+    env_file:
+      - .env
     build:
       context: ./backend
-    environment:
-      - DB_DATABASE=${POSTGRES_DB}
-      - DB_USERNAME=${POSTGRES_USER}
-      - DB_PASSWORD=${POSTGRES_PASSWORD}
-      - DB_HOST=${DB_HOST:-database}
-      - DB_PORT=${DB_PORT:-5432}
-      - JWT_SECRET=${JWT_SECRET}
-      - JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-24h}
-      - SWAGGER_API_PATH=${SWAGGER_API_PATH:-api}
-      - PORT=${BACKEND_APP_PORT:-4000}
     expose:
-      - $BACKEND_APP_PORT
+      - $PORT
     ports:
-      - $BACKEND_APP_PORT:$BACKEND_APP_PORT
+      - $PORT:$PORT
     links:
-      - database:postgres
+      - database
     depends_on:
       - database
     networks:
@@ -44,13 +37,12 @@ services:
   frontend:
     container_name: frontend
     hostname: frontend
-    environment:
-      - FRONTEND_APP_PORT=${FRONTEND_APP_PORT:-8081}
-      - API_SERVER_URL=${API_SERVER_URL}
+    env_file:
+      - .env
     build:
       context: ./frontend
       args:
-        - API_SERVER_URL=${API_SERVER_URL}
+        - API_SERVER_URL=$API_SERVER_URL
     depends_on:
       - backend
     ports:
@@ -60,7 +52,6 @@ services:
     restart: unless-stopped
 volumes:
   pg-data:
-
 networks:
   backend:
     internal: true
